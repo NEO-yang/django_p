@@ -14,6 +14,11 @@
 
     <h1>Login</h1>
     <p>Input your username and password</p>
+    {% if next %}
+    <form class="form-horizontal" action="{% url 'account:user_login' %}?next={{next}}" method="post" >
+    {% else %}
+    <form class="form-horizontal" action="{% url 'account:user_login' %}" method="post">
+    {% endif %}  
     <form class="form-horizontal" action="{% url 'account:user_login' %}" method="post">{% csrf_token %}
         {% comment %} {{ form.as_p}} {% endcomment %}
         <div class="form-group">
