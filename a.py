@@ -15,25 +15,32 @@
 #     print(f"序号: {index}, 数据: {data}")
 
 
-import pandas as pd
+# import pandas as pd
 
-# 读取a.xlsx文件，默认页签
-df = pd.read_excel("a.xlsx")
-names0 = df.iloc[:, 0].tolist()
-name1 = df.iloc[:, 1].tolist()
-names = df.iloc[:, 3].tolist()
-a = []
-b=[]
-for r,i in enumerate(names):
-    if i not in names0:
-        a.append([r+2,i])
-    else:
-        b.append(i)
-print(a,len(a),'mei')
-print(b,len(b))
+# # 读取a.xlsx文件，默认页签
+# df = pd.read_excel("a.xlsx")
+# names0 = df.iloc[:, 0].tolist()
+# name1 = df.iloc[:, 1].tolist()
+# names = df.iloc[:, 3].tolist()
+# a = []
+# b=[]
+# for r,i in enumerate(names):
+#     if i not in names0:
+#         a.append([r+2,i])
+#     else:
+#         b.append(i)
+# print(a,len(a),'mei')
+# print(b,len(b))
 
 # for i in df:
 #     print(i)
 
 # 输出A列数据
 # print(df['A'])
+
+
+import redis
+r = redis.StrictRedis(host="localhost",port=6379,db=0)
+r.set('a','c')
+
+print(r.get('a'),'ccc')

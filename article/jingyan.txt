@@ -1,0 +1,7 @@
+1、先建一个 APP 
+2、建立模型（字段，默认显示的字段） 表生产，数据迁移
+3、建立form.py 里面有mate 指明模型和显示的列
+4、建立views.py文件， 将返回的网页模板地址表名，还会传递参数。
+5、配置 总目录下 的urls.py中的URL加入APP的目录 （path('article/', include('article.urls', namespace='article')),
+6、配置APP下的URL  指向具体接口 urlpatterns = [path('article-column/', views.article_column, name="article_column")]
+7、建立html文件 用于前端的显示
