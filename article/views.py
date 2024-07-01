@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt 
 from django.http import HttpResponse
-from .models import ArticleColumn#, ArticlePost, ArticleTag
-from .forms import ArticleColumnForm#, ArticlePostForm, ArticleTagForm
+from .models import ArticleColumn, ArticlePost#, ArticleTag
+from .forms import ArticleColumnForm, ArticlePostForm#, ArticleTagForm
 # from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 
@@ -52,3 +52,50 @@ def del_article_column(request):
         return HttpResponse("1") 
     except:
         return HttpResponse("2")
+    
+
+@login_required(login_url='/account/login') 
+@csrf_exempt
+def article_post(request):
+    if request.method=="POST":
+        article_post_form = ArticlePostForm(data=request.POST) 
+        if article_post_form.is_valid():
+            cd = article_post_form.cleaned_data 
+            try:
+                new_article = article_post_form.save(commit=False) 
+                new_article.author = request.user
+                new_article.column = request.user.article_column.get(id=request.POST['column_id'])
+                new_article.save()
+                # tags = request.POST['tags']
+                # if tags:
+                #     for atag in json.loads(tags):
+                #         tag = request.user.tag.get(tag=atag)
+                #         new_article.article_tag.add(tag)
+                return HttpResponse("1") 
+            except Exception  as e:
+                print(e)
+                return HttpResponse("2") 
+
+        else:
+            return HttpResponse("3")
+    else:
+        article_post_form = ArticlePostForm()
+        article_columns = request.user.article_column.all()
+        article_tags = ''  #request.user.tag.all()
+        return render(request, "article/column/article_post.html",{"article_post_form":article_post_form, "article_columns":article_columns, "article_tags":article_tags})
+
+
+
+@login_required(login_url='/account/login') 
+def article_list(request):
+    articles_list = ArticlePost.objects.filter(author=request.user)
+    return render(request, "article/column/article_list.html",{"articles":articles_list })
+
+
+# def get_absolute_url(self): 
+#     return reverse("article:article_detail", args=[self.id, self.slug])
+
+@login_required(login_url='/account/login') 
+def article_detail(request, id, slug):
+    article = get_object_or_404(ArticlePost, id=id, slug=slug)
+    return render(request, "article/column/article_detail.html", {"article":article})
