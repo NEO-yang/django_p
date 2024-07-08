@@ -4,23 +4,22 @@
 {% block title %}articles list{% endblock %}
 {% block content %} 
 
-{% comment %} {% with total_likes=article.users_like.count users_like=article.users_like.all %} {% endcomment %}
+{% with total_likes=article.users_like.count users_like=article.users_like.all %}
 <div class="container">
 <div class="col-md-9">
     <header>
         <h1>{{ article.title }}</h1> 
-        <p> {{article.author.username}} </p>
+        {% comment %} <p> {{article.author.username}} </p> {% endcomment %}
         <p>
             <a href="{% url 'article:author_articles' article.author.username %}">{{ article.author.username }}</a>
-            {% comment %} <span style="margin-left:20px" class="glyphicon glyphicon-thumbs-up">
+            <span style="margin-left:20px" class="glyphicon glyphicon-thumbs-up">
                 {{ total_likes }} like {{ total_likes | pluralize }}
             </span>
-            <span style="margin-left:20px">
+            {% comment %} <span style="margin-left:20px">
                 {{ total_views }} view {{ total_views | pluralize}}
-            </span>
+            </span> {% endcomment %}
         </p>
-        <p> <span style="margin-right: 10px"><strong>Tags:</strong></span> {{ article.article_tag.all | join:", "}}</p> {% endcomment %}
-        </p>
+        {% comment %} <p> <span style="margin-right: 10px"><strong>Tags:</strong></span> {{ article.article_tag.all | join:", "}}</p> {% endcomment %}
     </header>
     
     <link rel="stylesheet" href="{% static 'editor/css/editormd.preview.css' %}" /> 
@@ -30,7 +29,7 @@
         </textarea>
 {% comment %} {{ article.body | markdown }} {% endcomment %}
     </div>
-    {% comment %} <div>
+    <div>
         <p class="text-center">
             <a onclick="like_article({{article.id}}, 'like')" href="#">
                 <span class="glyphicon glyphicon-thumbs-up">like</span>
@@ -39,15 +38,15 @@
                 <span style="margin-left: 15px;" class="glyphicon glyphicon-thumbs-down">unlike</span>
             </a>
         </p>
-    </div> {% endcomment %}
-    {% comment %} <div>
+    </div>
+    <div>
         <p class="text-center"><strong>点赞本文的读者</strong></p>
         {% for user in article.users_like.all %}
         <p class="text-center">{{user.username}}</p>
         {% empty %}
         <p class="text-center">还没有人对此文章表态</p>
         {% endfor %}
-    </div> {% endcomment %}
+    </div>
     {% comment %} <hr>
     <div>
         <h3><span class="glyphicon glyphicon-bullhorn"></span>本文有{{ comments.count }}评论</h3>
@@ -141,7 +140,7 @@ $(function(){
     });
 });
 
-{% comment %} function like_article(id, action){
+function like_article(id, action){
     $.ajax({
         url: "{% url 'article:like_article' %}", 
         type: "POST",
@@ -156,7 +155,7 @@ $(function(){
             } 
         },
     });
-} {% endcomment %}
+}
 </script>
-{% comment %} {% endwith %} {% endcomment %}
+{% endwith %}
 {% endblock %}
