@@ -5,6 +5,7 @@ from .forms import LoginForm, RegistrationForm, UserProfileForm,UserForm, UserIn
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile, UserInfo 
 from django.contrib.auth.models import User
+from django.urls import reverse 
 # Create your views here.
 
 
@@ -41,8 +42,8 @@ def register(request):
             new_profile = userprofile_form.save(commit=False)
             new_profile.user = new_user
             new_profile.save()
-
-            return HttpResponse('successfully')
+            return HttpResponseRedirect(reverse("account:user_login"))
+            # return HttpResponse('successfully')
 
         else:
             return HttpResponse('sorry, you can not register')
