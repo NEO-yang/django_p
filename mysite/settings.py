@@ -17,6 +17,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # print('aaaaaaaaa',Path(__file__).resolve(),Path(__file__).resolve().parent,BASE_DIR)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+REDIS_HOST = 'localhost' 
+REDIS_PORT = 6379 
+REDIS_DB = 0
+
 
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/account/login/'

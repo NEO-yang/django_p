@@ -9,9 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.db.models import Count
 
-# import redis
-# from django.conf import settings
-# r = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
+import redis
+from django.conf import settings
+r = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
 
 
 
@@ -44,12 +44,14 @@ def article_titles(request, username=None):
 
 def article_detail(request, id, slug):
     article = get_object_or_404(ArticlePost, id=id, slug=slug)
+    total_views = r.incr("article:{}:views".format(article.id)) #②
+    r.zincrby('article_ranking', 1, article.id) #①
     # totscrby('article_ranking', 1, article.id)
 
-    # article_ranking = r.zrange("article_ranking", 0, -1, desc=True)[:10]
-    # article_ranking_ids = [int(id) for id in article_ranking]
-    # most_viewed = list(ArticlePost.objects.filter(id__in=article_ranking_ids))
-    # most_viewed.sort(key=lambda x: article_ranking_ids.index(x.id))
+    article_ranking = r.zrange("article_ranking", 0, -1, desc=True)[:10]
+    article_ranking_ids = [int(id) for id in article_ranking]
+    most_viewed = list(ArticlePost.objects.filter(id__in=article_ranking_ids))
+    most_viewed.sort(key=lambda x: article_ranking_ids.index(x.id))
     
     # if request.method == "POST":
     #     comment_form = CommentForm(data=request.POST) 
@@ -63,6 +65,9 @@ def article_detail(request, id, slug):
     # similar_articles = ArticlePost.objects.filter(article_tag__in=article_tags_ids).exclude(id=article.id)
     # similar_articles = similar_articles.annotate(same_tags=Count("article_tag")).order_by('-same_tags', '-created')[:4]
     # return render(request, "article/list/article_content.html", {"article":article, "total_views":total_views, "most_viewed": most_viewed, "comment_form":comment_form, "similar_articles":similar_articles})
+    
+    
+    return render(request, "article/list/article_content.html", {"article":article, "total_views":total_views, "most_viewed": most_viewed})
     return render(request, "article/list/article_content.html", {"article":article})
 
 @csrf_exempt
