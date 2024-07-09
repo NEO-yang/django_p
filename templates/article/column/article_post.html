@@ -20,7 +20,7 @@
                 </select> 
             </div>
         </div>
-        {% comment %} <div class="row" style="margin-top: 10px;">
+        <div class="row" style="margin-top: 10px;">
             <div class="col-md-2 text-right"><span>文章标签:</span></div> 
             <div class="col-md-10 text-left">
                 {% for tag in article_tags %} 
@@ -31,7 +31,7 @@
                 <p>You have not type tags for articles. Please <a href="{% url 'article:article_tag' %}">input your tags</a></p> 
                 {% endfor %}    
             </div>
-        </div>  {% endcomment %}
+        </div> 
         <div class="row" style="margin-top: 10px;">
             <div class="col-md-2 text-right"><span>内容:</span></div>
             {% comment %} <div class="col-md-10 text-left">{{article_post_form.body}}</div> {% endcomment %}
@@ -54,12 +54,12 @@ function publish_article(){
     var column_id = $("#which_column").val(); 
     var body = $("#id_body").val();
     var article_tags = []; 
-    {% comment %} $.each($("input[name='article_tag']:checked"), function(){article_tags.push($(this).val());}); {% endcomment %}
+    $.each($("input[name='article_tag']:checked"), function(){article_tags.push($(this).val());});
     $.ajax({
         url: "{% url 'article:article_post' %}",
         type: "POST",
         data: {"title":title, "body":body, "column_id":column_id, 
-        {% comment %} "tags":JSON.stringify(article_tags) {% endcomment %}
+        "tags":JSON.stringify(article_tags)
         }, 
         success: function(e){
             if(e=="1"){ 
