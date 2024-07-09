@@ -21,6 +21,9 @@ REDIS_HOST = 'localhost'
 REDIS_PORT = 6379 
 REDIS_DB = 0
 
+MEDIA_URL = '/media/' 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/account/login/'
@@ -48,6 +51,8 @@ INSTALLED_APPS = [
     'blog',
     'account',
     'article',
+    'image',
+    # 'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
