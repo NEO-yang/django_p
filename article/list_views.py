@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger 
-from .models import ArticleColumn, ArticlePost#, Comment
-# from .forms import CommentForm
+from .models import ArticleColumn, ArticlePost, Comment
+from .forms import CommentForm
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required 
@@ -53,22 +53,21 @@ def article_detail(request, id, slug):
     most_viewed = list(ArticlePost.objects.filter(id__in=article_ranking_ids))
     most_viewed.sort(key=lambda x: article_ranking_ids.index(x.id))
     
-    # if request.method == "POST":
-    #     comment_form = CommentForm(data=request.POST) 
-    #     if comment_form.is_valid():
-    #         new_comment = comment_form.save(commit=False) 
-    #         new_comment.article = article 
-    #         new_comment.save()
-    # else:
-    #     comment_form = CommentForm()
+    if request.method == "POST":
+        comment_form = CommentForm(data=request.POST) 
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False) 
+            new_comment.article = article 
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
     # article_tags_ids = article.article_tag.values_list("id", flat=True)
     # similar_articles = ArticlePost.objects.filter(article_tag__in=article_tags_ids).exclude(id=article.id)
     # similar_articles = similar_articles.annotate(same_tags=Count("article_tag")).order_by('-same_tags', '-created')[:4]
     # return render(request, "article/list/article_content.html", {"article":article, "total_views":total_views, "most_viewed": most_viewed, "comment_form":comment_form, "similar_articles":similar_articles})
     
     
-    return render(request, "article/list/article_content.html", {"article":article, "total_views":total_views, "most_viewed": most_viewed})
-    return render(request, "article/list/article_content.html", {"article":article})
+    return render(request, "article/list/article_content.html", {"article":article, "total_views":total_views, "most_viewed": most_viewed, "comment_form":comment_form,})
 
 @csrf_exempt
 @require_POST 

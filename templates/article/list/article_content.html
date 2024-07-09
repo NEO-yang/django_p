@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% comment %} {% load article_tags %} {% endcomment %}
+{% load article_tags %}
 {% load static %}
 {% block title %}articles list{% endblock %}
 {% block content %} 
@@ -24,10 +24,10 @@
     
     <link rel="stylesheet" href="{% static 'editor/css/editormd.preview.css' %}" /> 
     <div id='editormd-view'>
-        <textarea id="append-test" style="display:none;"> 
+        {% comment %} <textarea id="append-test" style="display:none;"> 
 {{ article.body }}
-        </textarea>
-{% comment %} {{ article.body | markdown }} {% endcomment %}
+        </textarea> {% endcomment %}
+        {{ article.body | markdown }}
     </div>
     <div>
         <p class="text-center">
@@ -39,15 +39,15 @@
             </a>
         </p>
     </div>
-    {% comment %} <div>
+    <div>
         <p class="text-center"><strong>点赞本文的读者</strong></p>
         {% for user in article.users_like.all %}
         <p class="text-center">{{user.username}}</p>
         {% empty %}
         <p class="text-center">还没有人对此文章表态</p>
         {% endfor %}
-    </div> {% endcomment %}
-    {% comment %} <hr>
+    </div>
+    <hr>
     <div>
         <h3><span class="glyphicon glyphicon-bullhorn"></span>本文有{{ comments.count }}评论</h3>
         {% for comment in article.comments.all %}
@@ -79,7 +79,7 @@
                 </div>
             </div>
         </form>
-    </div> {% endcomment %}
+    </div>
 
 </div>
 <div class="col-md-3">
@@ -92,7 +92,7 @@
         {% endfor %} 
     </ol>
     
-    {% comment %} <hr>
+    <hr>
     <p class="text-center"><h3>最新文章</h3></p>
     {% latest_articles 4 %}
 
@@ -107,7 +107,7 @@
         {% endfor %} 
     </ul>
 
-    <hr>
+    {% comment %} <hr>
     <p class="text-center"><h3>推荐相似文章</h3></p>
     {% for similar in similar_articles %}
     <p><a href="{{ similar.get_url_path }}">{{ similar.title }}</a></p> 
