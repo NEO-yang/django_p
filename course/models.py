@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from slugify import slugify
-# from .fields import OrderField
+from .fields import OrderField
 
 class Course(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='courses_user') 
@@ -23,7 +23,7 @@ class Course(models.Model):
 
 def user_directory_path(instance, filename):
     return "courses/user_{0}/{1}".format(instance.user.id, filename)
-'''
+
 class Lesson(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='lesson_user')
     course = models.ForeignKey(Course, on_delete=models.CASCADE,related_name='lesson') 
@@ -40,4 +40,3 @@ class Lesson(models.Model):
     def __str__(self):
         return '{}.{}'.format(self.order, self.title)
 
-'''

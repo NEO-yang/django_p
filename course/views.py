@@ -3,8 +3,8 @@ from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.base import TemplateResponseMixin
 from django.views import View
-from .models import Course#, Lesson
-# from .forms import CreateCourseForm, CreateLessonForm
+from .models import Course, Lesson
+from .forms import CreateCourseForm, CreateLessonForm
 
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -37,7 +37,7 @@ class UserCourseMixin(UserMixin, LoginRequiredMixin):
 class ManageCourseListView(UserCourseMixin, ListView):
     context_object_name = "courses"
     template_name = 'course/manage/manage_course_list.html'
-'''
+
 
 class CreateCourseView(UserCourseMixin, CreateView):
     fields = ['title', 'overview']
@@ -53,11 +53,12 @@ class CreateCourseView(UserCourseMixin, CreateView):
         return self.render_to_response({"form":form})
 
 class DeleteCourseView(UserCourseMixin, DeleteView): 
-    #template_name = 'course/manage/delete_course_confirm.html' 
+    # template_name = 'course/manage/delete_course_confirm.html' 
     success_url = reverse_lazy("course:manage_course")
     def dispatch(self, *args, **kwargs):
         resp = super(DeleteCourseView, self).dispatch(*args, **kwargs)
-        if self.request.is_ajax():
+        # if self.request.is_ajax:
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             response_data = {"result": "ok"}
             return HttpResponse(json.dumps(response_data), content_type="application/json")
         else:
@@ -102,4 +103,3 @@ class StudentListLessonView(ListLessonsView):
         course = Course.objects.get(id=kwargs['course_id']) 
         course.student.add(self.request.user)
         return HttpResponse("ok")
-'''

@@ -4,9 +4,9 @@
 {% block content %}
 <div>
     <div class='text-right'>
-        {% comment %} <a href="{% url 'course:create_course' %}">
+        <a href="{% url 'course:create_course' %}">
             <button type="button" class="btn btn-primary">添加课程</button>
-        </a> {% endcomment %}
+        </a>
     </div>
 
     <table class="table table-hover" style="margin-top:10px">
@@ -23,14 +23,14 @@
             <td>{{ course.created|date:"Y-m-d" }}</td> 
             <td>
                 <a name="edit" href="javascript:"><span class="glyphicon glyphicon-pencil"></span></a>
-                {% comment %} <a class="delete" nane="delete" href="{% url 'course:delete_course' course.id %}"><span class="glyphicon glyphicon-trash" style="margin-left:20px;"></span></a> {% endcomment %}
-                {% comment %} <a href="{% url 'course:list_lessons' course.id %}"><span class="glyphicon glyphicon-search" style="margin-left:20px;"></span></a> {% endcomment %}
+                <a class="delete" Snane="delete" href="{% url 'course:delete_course' course.id %}"><span class="glyphicon glyphicon-trash" style="margin-left:20px;"></span></a>
+                <a href="{% url 'course:list_lessons' course.id %}"><span class="glyphicon glyphicon-search" style="margin-left:20px;"></span></a>
             </td> 
         </tr>
         {% endfor %} 
     </table>
 </div>
-{% comment %} <script type="text/javascript" src='{% static "js/jquery.js" %}'></script>
+<script type="text/javascript" src='{% static "js/jquery.js" %}'></script>
 <script type="text/javascript">
 function getCookie(name) {
     var cookieValue = null;
@@ -75,5 +75,5 @@ $(document).ready(function() {
     }
     $(".delete").click(onDelete); 
 })
-</script> {% endcomment %}
+</script> 
 {% endblock %}
